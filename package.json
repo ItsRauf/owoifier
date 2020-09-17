@@ -1,0 +1,17 @@
+{
+  "name": "owoifier",
+  "version": "0.0.1-alpha",
+  "description": "Make your discord owoified.",
+  "main": "index.js",
+  "repository": "https://git.bug-hunters.me/rauf/owoifier.git",
+  "author": "Rauf#3543",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "discord.js": "^12.3.1",
+    "mongodb": "^3.6.2",
+    "owoify-js": "^1.0.7"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0"
+  }
+}
