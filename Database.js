@@ -1,3 +1,10 @@
+/**
+ * @typedef {Object} GuildDoc
+ * @property {String} guild._id
+ * @property {Array<String>} guild.channels
+ * @property {String} lang
+ */
+
 const { MongoClient } = require("mongodb");
 
 module.exports = function Database() {
@@ -20,11 +27,22 @@ module.exports = function Database() {
  */
 module.exports.addGuild = (mongo, guild) => {
   const guilds = mongo.db(process.env.DBNAME).collection("guilds");
-  return guilds.createIndex({
+  return guilds.insertOne({
     _id: guild,
     channels: [],
     lang: "owo",
   });
+};
+
+/**
+ *
+ * @param {MongoClient} mongo
+ * @param {String} guild
+ * @returns {Promise<GuildDoc>}
+ */
+module.exports.findGuild = (mongo, guild) => {
+  const guilds = mongo.db(process.env.DBNAME).collection("guilds");
+  return guilds.findOne({ _id: guild });
 };
 
 /**
@@ -36,6 +54,17 @@ module.exports.addGuild = (mongo, guild) => {
 module.exports.setGuildLang = (mongo, guild, lang) => {
   const guilds = mongo.db(process.env.DBNAME).collection("guilds");
   return guilds.updateOne({ _id: guild }, { $set: { lang } });
+};
+
+/**
+ *
+ * @param {MongoClient} mongo
+ * @param {String} guild
+ * @param {Object} webhook
+ */
+module.exports.setGuildWebhook = (mongo, guild, webhook) => {
+  const guilds = mongo.db(process.env.DBNAME).collection("guilds");
+  return guilds.updateOne({ _id: guild }, { $set: { webhook } });
 };
 
 /**
@@ -57,5 +86,5 @@ module.exports.addGuildChannel = (mongo, guild, channel) => {
  */
 module.exports.removeGuildChannel = (mongo, guild, channel) => {
   const guilds = mongo.db(process.env.DB_NAME).collection("guilds");
-  return guilds.updateOne({ _id: guild }, { $pop: { channels: channel } });
+  return guilds.updateOne({ _id: guild }, { $pull: { channels: channel } });
 };
