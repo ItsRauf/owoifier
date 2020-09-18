@@ -33,8 +33,10 @@ uvu: 'oh dear god please help me, save me from this hell that is uvu'
 
 ## Commands
 
-prefix: owo or @Owoifier  
-{ } = optional < > = required
+prefix: owo or @Owoifier
+
+{ } = optional, < > = required
+
 | Name | Usage | User Permissions |
 |----------|--------------------------|------------------|
 | Setup | setup | MANAGE_WEBHOOKS |
