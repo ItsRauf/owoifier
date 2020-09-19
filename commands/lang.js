@@ -1,5 +1,5 @@
 const owoify = require("owoify-js").default;
-const { setGuildLang } = require("../Database");
+const { setGuildLang, findGuild } = require("../Database");
 
 module.exports = {
   name: "lang",
@@ -11,7 +11,10 @@ module.exports = {
   func: async (client, msg, args) => {
     const langs = ["owo", "uwu", "uvu"];
     if (msg.member.hasPermission("MANAGE_WEBHOOKS")) {
-      if (!args[0].toLowerCase()) {
+      const guild = await findGuild(client.mongo, msg.guild.id);
+      if (!guild) {
+        msg.channel.send(owoify("This server is not set up."));
+      } else if (args.length === 0) {
         msg.channel.send(owoify("Please provide a lang."));
       } else if (!langs.includes(args[0].toLowerCase())) {
         msg.channel.send(
