@@ -33,27 +33,43 @@ module.exports = {
         msg.content.startsWith(process.env.PREFIX) ||
         msg.content.startsWith(client.user.toString())
       ) {
-        CommandHandler(client, msg);
+        if (msg.guild.me.hasPermission("MANAGE_WEBHOOKS")) {
+          CommandHandler(client, msg);
+        } else {
+          msg.channel.send(
+            "Owoifier needs `Manage Webhooks` permission to work."
+          );
+        }
       } else {
         const guild = await findGuild(client.mongo, msg.guild.id);
         if (guild && guild.channels.length > 0) {
           if (guild.channels.includes(msg.channel.id)) {
             const owoify = require("owoify-js").default;
-            await msg.delete({
-              timeout: 1000,
-            });
-            const webhooks = await msg.guild.fetchWebhooks();
-            const webhook = webhooks.get(guild.webhook.id);
-            if (webhook.channelID !== msg.channel.id) {
-              await webhook.edit({
-                channel: msg.channel.id,
+            if (msg.guild.me.hasPermission("MANAGE_WEBHOOKS")) {
+              const webhooks = await msg.guild.fetchWebhooks();
+              const webhook = webhooks.get(guild.webhook.id);
+              await msg
+                .delete({
+                  timeout: 1000,
+                })
+                .catch(() => {
+                  msg.channel.send("Unable to delete message");
+                });
+              if (webhook.channelID !== msg.channel.id) {
+                await webhook.edit({
+                  channel: msg.channel.id,
+                });
+              }
+              webhook.send(owoify(msg.cleanContent, guild.lang), {
+                username: msg.member.displayName,
+                avatarURL: msg.author.avatarURL(),
+                disableMentions: "all",
               });
+            } else {
+              msg.channel.send(
+                "Owoifier needs `Manage Webhooks` permission to work."
+              );
             }
-            webhook.send(owoify(msg.cleanContent, guild.lang), {
-              username: msg.member.displayName,
-              avatarURL: msg.author.avatarURL(),
-              disableMentions: "all",
-            });
           }
         }
       }
