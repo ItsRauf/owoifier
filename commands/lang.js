@@ -23,6 +23,10 @@ module.exports = {
           owoify(`Language is now set to ${args[0].toLowerCase()}.`)
         );
       }
+    } else {
+      msg.channel.send(
+        "You're unable to run this command. Missing Permission: `Manage Webhooks`"
+      );
     }
   },
 };

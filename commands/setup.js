@@ -33,6 +33,10 @@ module.exports = {
       } catch (error) {
         throw error;
       }
+    } else {
+      msg.channel.send(
+        "You're unable to run this command. Missing Permission: `Manage Webhooks`"
+      );
     }
   },
 };
