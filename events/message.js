@@ -33,11 +33,14 @@ module.exports = {
         msg.content.startsWith(process.env.PREFIX) ||
         msg.content.startsWith(client.user.toString())
       ) {
-        if (msg.guild.me.hasPermission("MANAGE_WEBHOOKS")) {
+        if (
+          msg.guild.me.hasPermission("MANAGE_WEBHOOKS") &&
+          msg.member.hasPermission("MANAGE_WEBHOOKS")
+        ) {
           CommandHandler(client, msg);
         } else {
           msg.channel.send(
-            "Owoifier needs `Manage Webhooks` permission to work."
+            "Owoifier or you needs `Manage Webhooks` permission to work."
           );
         }
       } else {
