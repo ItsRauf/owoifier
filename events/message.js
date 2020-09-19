@@ -63,7 +63,9 @@ module.exports = {
               webhook.send(owoify(msg.cleanContent, guild.lang), {
                 username: msg.member.displayName,
                 avatarURL: msg.author.avatarURL(),
-                disableMentions: "all",
+                allowedMentions: {
+                  parse: [],
+                },
               });
             } else {
               msg.channel.send(
