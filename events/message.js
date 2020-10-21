@@ -29,6 +29,7 @@ module.exports = {
   func: async (client, msg) => {
     try {
       if (msg.author.bot) return;
+      if (msg.content.startsWith(process.env.IGNORE)) return;
       if (
         msg.content.startsWith(process.env.PREFIX) ||
         msg.content.startsWith(client.user.toString())
@@ -44,6 +45,8 @@ module.exports = {
         const guild = await findGuild(client.mongo, msg.guild.id);
         if (guild && guild.channels.length > 0) {
           if (guild.channels.includes(msg.channel.id)) {
+            if (guild.config.ignored_channels.includes(msg.channel.id)) return;
+            if (guild.config.ignored_users.includes(msg.author.id)) return;
             const owoify = require("owoify-js").default;
             if (msg.guild.me.hasPermission("MANAGE_WEBHOOKS")) {
               const webhooks = await msg.guild.fetchWebhooks();
